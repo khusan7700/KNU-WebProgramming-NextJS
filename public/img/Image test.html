@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>폴더 내 이미지 출력</title>
+    <style>
+        #image-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .image-item {
+            margin: 10px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>폴더 내 이미지 자동 출력</h1>
+
+    <!-- 파일 입력 (폴더 선택 가능, 여러 이미지 파일 선택) -->
+    <input type="file" id="file-input" multiple accept="image/*">
+
+    <!-- 이미지 출력 컨테이너 -->
+    <div id="image-container"></div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const files = event.target.files;  // 사용자가 선택한 파일들
+            const imageContainer = document.getElementById('image-container');
+            imageContainer.innerHTML = '';  // 기존 이미지들 제거
+
+            // 파일들을 처리
+            Array.from(files).forEach(file => {
+                // 이미지 파일만 처리
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;  // 파일을 이미지로 변환하여 출력
+
+                        const imgItem = document.createElement('div');
+                        imgItem.classList.add('image-item');
+                        imgItem.appendChild(imgElement);  // 이미지 항목을 생성하여 컨테이너에 추가
+                        imageContainer.appendChild(imgItem);
+                    };
+
+                    reader.readAsDataURL(file);  // 파일을 읽어 데이터 URL로 변환
+                }
+            });
+        });
+    </script>
+</body>
+</html>
